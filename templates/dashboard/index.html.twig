@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DashboardController!{% endblock %}
+
+{% block body %}
+    <h3>Test is divided in 2 sections, consumer and provider</h3>
+    <p> I created a resful API that do the CRUD of companies/employees.</p>
+    <p>2 entities, Company and employee where 1 company has +1 employees</p>
+    <p>
+        <a class="btn btn-primary" href="{{ path('consumer_index') }}">Consumer</a>
+        <a class="btn btn-secondary" href="{{ path('provider_index') }}">Provider</a>
+    </p>
+    <p>You can check documentation and test api here:</p>
+    <a class="btn btn-info" href="{{ path('app.swagger_ui') }}">Documentation</a>
+
+
+{% endblock %}

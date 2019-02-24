@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConsumerController!{% endblock %}
+
+{% block body %}
+<h1>{{ title }}</h1>
+<div class="example-wrapper">
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+    <a class="btn btn-info" href="{{ path('consumer_index') }}">Back</a>
+{% endblock %}

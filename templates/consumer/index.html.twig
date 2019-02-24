@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ConsumerController!{% endblock %}
+
+{% block body %}
+    <h1 class="h1">Consumer Page</h1>
+    <p>Here you will see some work with work with some features of symfony like handling forms</p>
+    <a class="btn btn-primary" href="{{ path('consumer_add_company') }}">add Company</a>
+
+    <a class="btn btn-primary" href="{{ path('consumer_add_employee') }}">add Employee</a>
+    <div class="sc-container">
+        <div class="sc-container__column">
+            <h3>Edit company</h3>
+            {% for company in companies %}
+                <a class="btn-link btn"
+                   href="{{ path('consumer_edit_company', {'company': company.id }) }}">{{ company.name }}</a><br>
+            {% endfor %}
+        </div>
+        <div class="sc-container__column">
+
+            <h3>Edit Employee</h3>
+            {% for employee in employees %}
+                <a class="btn-link btn"
+                   href="{{ path('consumer_edit_employee', {'employee': employee.id }) }}">{{ employee.firstName }} {{ employee.lastName }}</a>
+                <br>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
