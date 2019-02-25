@@ -10,6 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * Class ConsumerController
+ * @package App\Controller
+ */
 class ConsumerController extends AbstractController
 {
     /**
@@ -19,9 +23,7 @@ class ConsumerController extends AbstractController
     {
         $entityManager = $this->getDoctrine()->getManager();
         $companies = $entityManager->getRepository(Company::class)->findAll();
-//        $employees = $entityManager->getRepository(Employee::class)->findAll();
-        $employees = $entityManager->getRepository(Employee::class)->findOneby([]);
-
+        $employees = $entityManager->getRepository(Employee::class)->findAll();
         return $this->render('consumer/index.html.twig', [
             'employees' => $employees,
             'companies' => $companies,

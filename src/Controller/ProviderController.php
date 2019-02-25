@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class ProviderController extends Controller
 {
     /**
-     * @Route("/provider", name="provider_index")
+     * @Route("/provider", name="provider_index", methods={"GET"})
      */
     public function index()
     {
@@ -60,9 +60,9 @@ class ProviderController extends Controller
             case Company::NAME:
             default:
                 $instance = $entityManager->getRepository(Company::class)->findAll();
-            $normalizer->setCircularReferenceHandler(function ($object, string $format = null, array $context = []) {
-                return $object->getName();
-            });
+                $normalizer->setCircularReferenceHandler(function ($object, string $format = null, array $context = []) {
+                    return $object->getName();
+                });
         }
 
         // Using serializer
@@ -76,8 +76,8 @@ class ProviderController extends Controller
      * Create and Persist a new company or empployee
      * Return OK and status 200 if the data is correct or 400
      * @param ValidatorInterface $validator
-     * @param Request            $request
-     * @param string             $type
+     * @param Request $request
+     * @param string $type
      * @return JsonResponse
      * @Route("/provider/{type}/add", name="provider_add", methods={"GET"}, defaults={"type": "company"},
      *     requirements={"type": "company|employee"})
@@ -143,7 +143,7 @@ class ProviderController extends Controller
         $errors = $validator->validate($entity);
         if (count($errors) > 0) {
             // This gives us a nice string for error feedback.
-            $errorsString = (string) $errors;
+            $errorsString = (string)$errors;
 
             return new JsonResponse($errorsString, Response::HTTP_BAD_REQUEST);
         }
@@ -157,9 +157,9 @@ class ProviderController extends Controller
      * edit and Persist an existing company or empployee
      * Return OK and status 200 if the data is correct or 400
      * @param ValidatorInterface $validator
-     * @param Request            $request
-     * @param string             $type
-     * @param integer             $id
+     * @param Request $request
+     * @param string $type
+     * @param integer $id
      * @return JsonResponse
      * @Route("/provider/{type}/{id}/edit", name="provider_edit", methods={"PUT"}, defaults={"type": "company"},
      *     requirements={"type": "company|employee", "id":"\d+"})
@@ -211,13 +211,13 @@ class ProviderController extends Controller
 
         if ($type == Company::NAME) {
             $entity = $entityManager->getRepository(Company::class)->find($id);
-            if ($entity === null) return new JsonResponse($type.' does not exist', Response::HTTP_BAD_REQUEST);
+            if ($entity === null) return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
             $entity->setName($cleanParameters['name']);
             $entity->setHeadquarters($cleanParameters['headquarters']);
             $entity->setFounded($cleanParameters['founded']);
         } else {
             $entity = $entityManager->getRepository(Employee::class)->find($id);
-            if ($entity === null) return new JsonResponse($type.' does not exist', Response::HTTP_BAD_REQUEST);
+            if ($entity === null) return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
             $entity->setFirstName($cleanParameters['firstname']);
             $entity->setLastName($cleanParameters['lastName']);
             $entity->setCompany($cleanParameters['company']);
@@ -228,7 +228,7 @@ class ProviderController extends Controller
         $errors = $validator->validate($entity);
         if (count($errors) > 0) {
             // This gives us a nice string for error feedback.
-            $errorsString = (string) $errors;
+            $errorsString = (string)$errors;
 
             return new JsonResponse($errorsString, Response::HTTP_BAD_REQUEST);
         }
@@ -242,7 +242,7 @@ class ProviderController extends Controller
      * delete an existing company or empployee
      * Return OK and status 200 if the data is correct or 400
      * @param Request $request
-     * @param string  $type
+     * @param string $type
      * @param integer $id
      * @return Response
      * @Route("/provider/{type}/{id}/remove", name="provider_delete", methods={"DELETE"}, defaults={"type": "company"},

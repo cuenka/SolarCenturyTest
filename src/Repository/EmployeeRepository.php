@@ -19,14 +19,28 @@ class EmployeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Employee::class);
     }
 
-    // /**
-    //  * @return Employee[] Returns an array of Employee objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param $company
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function findByCompany($company)
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.id, e.firstName, e.lastName, c.name, c.headquarters')
+            ->leftJoin('App\Entity\Company', 'c', \Doctrine\ORM\Query\Expr\Join::WITH, 'e.company = c.id')
+            ->setMaxResults(20)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public function findByLastName($value)
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+            ->andWhere('s.lastName = :val')
             ->setParameter('val', $value)
             ->orderBy('s.id', 'ASC')
             ->setMaxResults(10)
@@ -34,17 +48,20 @@ class EmployeeRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Employee
+
+    /**
+     * @param $value
+     * @return Employee|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findOneName($value): ?Employee
     {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
+            ->andWhere('s.firstName = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }
