@@ -15,10 +15,14 @@ php composer install
 DATABASE_URL=mysql://solarc:solarc@127.0.0.1:3306/solar_century
 ```
 Also update phpunit.xml.dist with the right DB, Line 15
-In order to create Database, create schema and add fixtures run:
+In order to create Database, create migration and add fixtures run:
+Updated: Before I used schema, migrations offer solutions to potential future problems.
+https://stackoverflow.com/questions/23339711/doctrine-schema-update-or-doctrine-migrations
+
 ```
 php bin/console doctrine:database:create
-php bin/console doctrine:schema:create
+php bin/console make:migration
+php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 ```
 
