@@ -26,8 +26,18 @@ php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 ```
 
-I used minimum css and JS for this test but I used standard set up encore.(not required)
+I used minimum css and JS for this test but I used standard set up encore.
 https://symfony.com/doc/4.0/frontend/encore/installation.html
+In order to see the up running properly execute the following comands:
+```
+yarn install
+yarn add @symfony/webpack-encore --dev
+yarn add sass-loader@^7.0.1 node-sass --dev
+yarn add bootstrap
+yarn add popper.js
+yarn add jquery
+yarn encore dev
+```
 
 
 Code standards: I followed https://cs.symfony.com/
