@@ -23,37 +23,30 @@ class EmployeeFixtures extends Fixture
                 [
                 'firstName' => 'John',
                 'lastName' => 'Doe',
-                'photo' => 'staffA.jpg'
                 ],
                 [
                     'firstName' => 'James',
                     'lastName' => 'Garcia',
-                    'photo' => 'staffB.jpg'
                 ],
                 [
                     'firstName' => 'Michael',
                     'lastName' => 'Smith',
-                    'photo' => 'staffC.jpg'
                 ],
                 [
                     'firstName' => 'Maria',
                     'lastName' => 'Hernandez',
-                    'photo' => 'staffD.jpg'
                 ],
                 [
                     'firstName' => 'Susan',
                     'lastName' => 'King',
-                    'photo' => 'staffE.jpg'
                 ],
                 [
                     'firstName' => 'Emily',
                     'lastName' => 'Bell',
-                    'photo' => 'staffF.jpg'
                 ],
                 [
                     'firstName' => 'Emma',
                     'lastName' => 'Doe',
-                    'photo' => 'staffG.jpg'
                 ]
             ];
         } catch (\Exception $exception) {
@@ -76,7 +69,6 @@ class EmployeeFixtures extends Fixture
             // Getting references from Company
             $employeeInstance->setFirstName($employee['firstName'])
                 ->setLastName($employee['lastName'])
-                ->setPhoto($employee['photo'])
                 ->setCompany($this->getReference(CompanyFixtures::COMPANY. rand(0, 2)));
             $manager->persist($employeeInstance);
         }

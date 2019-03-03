@@ -79,7 +79,7 @@ class ProviderController extends Controller
      * @param Request $request
      * @param string $type
      * @return JsonResponse
-     * @Route("/provider/{type}/add", name="provider_add", methods={"GET"}, defaults={"type": "company"},
+     * @Route("/provider/{type}/add", name="provider_add", methods={"POST"}, defaults={"type": "company"},
      *     requirements={"type": "company|employee"})
      * @SWG\Response(
      *     response=200,
@@ -150,7 +150,7 @@ class ProviderController extends Controller
 
         $entityManager->flush();
 
-        return new JsonResponse('OK', Response::HTTP_OK);
+        return new JsonResponse('OK', Response::HTTP_CREATED);
     }
 
     /**

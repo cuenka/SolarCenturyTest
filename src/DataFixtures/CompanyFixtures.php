@@ -24,19 +24,16 @@ class CompanyFixtures extends Fixture
                 'name' => 'Company A',
                 'headquarters' => 'Flat 1, Nice Place, N1 1A1 London, United kingdom',
                 'founded' => new \DateTime('-  10 years'),
-                'logo' => 'logoA.jpg'
                 ],
                 [
                     'name' => 'Company B',
                     'headquarters' => 'Flat 10, Great Place, NW1 1B1 London, United kingdom',
                     'founded' => new \DateTime('-  8 years'),
-                    'logo' => 'logoB.jpg'
                 ],
                 [
                     'name' => 'Company C',
                     'headquarters' => 'Flat 20, Awesome Place, NE2 2B1 London, United kingdom',
                     'founded' => new \DateTime('-  3 years'),
-                    'logo' => 'logoC.jpg'
                 ]
             ];
         } catch (\Exception $exception) {
@@ -58,8 +55,7 @@ class CompanyFixtures extends Fixture
             $companyInstance = new Company();
             $companyInstance->setName($company['name'])
                 ->setHeadquarters($company['headquarters'])
-                ->setFounded($company['founded'])
-                ->setLogo($company['logo']);
+                ->setFounded($company['founded']);
             $manager->persist($companyInstance);
 
             // These references will be used when staff is created
