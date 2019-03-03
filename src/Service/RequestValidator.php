@@ -23,7 +23,8 @@ class RequestValidator extends Validator
         $cleanParameters['headquarters'] = (isset($parameters['headquarters']) ? $parameters['headquarters'] : null);
         $cleanParameters['founded'] = (isset($parameters['founded']) ? new \DateTime($parameters['founded']) : null);
         $cleanParameters['firstName'] = (isset($parameters['firstName']) ? $parameters['firstName'] : null);
-        $cleanParameters['LastName'] = (isset($parameters['LastName']) ? $parameters['LastName'] : null);
+        $cleanParameters['lastName'] = (isset($parameters['lastName']) ? $parameters['lastName'] : null);
+        $cleanParameters['company'] = (isset($parameters['company']) ? $parameters['company'] : null);
 
         return $cleanParameters;
     }

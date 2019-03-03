@@ -14,9 +14,25 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class EmployeeRepository extends ServiceEntityRepository
 {
+    /**
+     * EmployeeRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Employee::class);
+    }
+
+    /**
+     * Return all employees as array so it is easier to display
+     * @return array
+     */
+    public function findAllEmployeesAsArray()
+    {
+        return $this->createQueryBuilder('e')
+            ->getQuery()
+            ->getArrayResult();
+
     }
 
     /**

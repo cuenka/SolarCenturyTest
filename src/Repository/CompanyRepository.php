@@ -14,9 +14,25 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class CompanyRepository extends ServiceEntityRepository
 {
+    /**
+     * CompanyRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Company::class);
+    }
+
+    /**
+     * Return all companies as array so it is easier to display
+     * @return array
+     */
+    public function findAllCompaniesAsArray()
+    {
+        return $this->createQueryBuilder('c')
+            ->getQuery()
+            ->getArrayResult();
+
     }
 
      /**

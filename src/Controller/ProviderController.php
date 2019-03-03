@@ -49,27 +49,16 @@ class ProviderController extends Controller
     public function list(string $type)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $normalizer = new ObjectNormalizer();
         switch ($type) {
             case Employee::NAME:
-                $instance = $entityManager->getRepository(Employee::class)->findAll();
-                $normalizer->setCircularReferenceHandler(function ($object, string $format = null, array $context = []) {
-                    return $object->getFirstName();
-                });
+                $instance = $entityManager->getRepository(Employee::class)->findAllEmployeesAsArray();
                 break;
             case Company::NAME:
             default:
-                $instance = $entityManager->getRepository(Company::class)->findAll();
-                $normalizer->setCircularReferenceHandler(function ($object, string $format = null, array $context = []) {
-                    return $object->getName();
-                });
+                $instance = $entityManager->getRepository(Company::class)->findAllCompaniesAsArray();
         }
 
-        // Using serializer
-        $serializer = new Serializer([$normalizer], [new JsonEncoder()]);
-        $jsonContent = $serializer->serialize($instance, 'json');
-
-        return new Response($jsonContent, Response::HTTP_OK);
+        return new JsonResponse($instance, Response::HTTP_OK);
     }
 
     /**
@@ -204,38 +193,49 @@ class ProviderController extends Controller
      */
     public function edit(ValidatorInterface $validator, Request $request, string $type, int $id)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $parameters = $request->query->all();
-        $paramValidator = $this->get('app.service.request_validator');
-        $cleanParameters = $paramValidator->validateRequest($parameters);
+        try {
+            $entityManager = $this->getDoctrine()->getManager();
+            $paramValidator = $this->get('app.service.request_validator');
+            $parameters = $request->query->all();
+            if ($request->isXmlHttpRequest()) {
+                $parameters = json_decode($request->getContent(), true);
+            }
+            $cleanParameters = $paramValidator->validateRequest($parameters);
 
-        if ($type == Company::NAME) {
-            $entity = $entityManager->getRepository(Company::class)->find($id);
-            if ($entity === null) return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
-            $entity->setName($cleanParameters['name']);
-            $entity->setHeadquarters($cleanParameters['headquarters']);
-            $entity->setFounded($cleanParameters['founded']);
-        } else {
-            $entity = $entityManager->getRepository(Employee::class)->find($id);
-            if ($entity === null) return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
-            $entity->setFirstName($cleanParameters['firstname']);
-            $entity->setLastName($cleanParameters['lastName']);
-            $entity->setCompany($cleanParameters['company']);
+            if ($type == Company::NAME) {
+                $entity = $entityManager->getRepository(Company::class)->find($id);
+                if ($entity === null) {
+                    return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
+                }
+                $entity->setName($cleanParameters['name']);
+                $entity->setHeadquarters($cleanParameters['headquarters']);
+                $entity->setFounded($cleanParameters['founded']);
+            } else {
+                $entity = $entityManager->getRepository(Employee::class)->find($id);
+                if ($entity === null) {
+                    return new JsonResponse($type . ' does not exist', Response::HTTP_BAD_REQUEST);
+                }
+                $entity->setFirstName($cleanParameters['firstName']);
+                $entity->setLastName($cleanParameters['lastName']);
+
+            }
+            $entity->setDateModified(new \DateTime());
+            $entityManager->persist($entity);
+
+            $errors = $validator->validate($entity);
+            if (count($errors) > 0) {
+                // This gives us a nice string for error feedback.
+                $errorsString = (string)$errors;
+
+                return new JsonResponse($errorsString, Response::HTTP_BAD_REQUEST);
+            }
+
+            $entityManager->flush();
+
+            return new JsonResponse('OK', Response::HTTP_OK);
+        } catch (\Exception $exception) {
+            return new JsonResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST);
         }
-        $entity->setDateModified(new \DateTime());
-        $entityManager->persist($entity);
-
-        $errors = $validator->validate($entity);
-        if (count($errors) > 0) {
-            // This gives us a nice string for error feedback.
-            $errorsString = (string)$errors;
-
-            return new JsonResponse($errorsString, Response::HTTP_BAD_REQUEST);
-        }
-
-        $entityManager->flush();
-
-        return new JsonResponse('OK', Response::HTTP_OK);
     }
 
     /**

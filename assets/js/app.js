@@ -17,7 +17,40 @@ require('bootstrap');
 // require('bootstrap/js/dist/popover');
 
 $(document).ready(function() {
+    function ajaxCall(event) {
+        var $domResult = $('.api__result');
+        var $object = $(event.target);
+        var endpoint = $object.data('endpoint');
+        var method = $object.data('method');
+        var body = (typeof $object.data('body') === "undefined") ? "" :  JSON.stringify($object.data('body'));
+
+        if (typeof method === "undefined" ||
+            typeof endpoint === "undefined") {
+            alert("Attributes missing, please make sure that data-endpoint and data-method are not empty")
+            return 0;
+        }
+
+        $.ajax({
+            url: endpoint,
+            method: method,
+            data: body,
+            contentType: "application/json"
+        }).done(function( data, statusText, xhr ) {
+                $domResult.find('.api__result__status').html('<b>Status:</b> '+xhr.status);
+                $domResult.find('.api__result__data').html('');
+                var responseData = JSON.stringify(data)
+                $domResult.find('.api__result__data').html("<pre>"+responseData+"</pre>");
+        }).fail(function( xhr, status, errorThrown) {
+            $domResult.find('.api__result__status').html('<b>Status:</b> '+xhr.status);
+            $domResult.find('.api__result__data').html('');
+            var responseData = xhr.responseText;
+            $domResult.find('.api__result__data').html("<pre>"+responseData+"</pre>");
+        });
+
+    }
+
+
     $('[data-toggle="popover"]').popover();
+    $( ".sc-ajax-call" ).on( "click", {}, ajaxCall );
 });
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');

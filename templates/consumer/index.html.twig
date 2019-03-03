@@ -5,6 +5,7 @@
 {% block body %}
     <h1 class="h1">Consumer Page</h1>
     <p>Here you will see some work with work with some features of symfony like handling forms</p>
+    <p class="text-warning">Resfresh browser to see updated result after AJAX</p>
     <a class="btn btn-primary" href="{{ path('consumer_add_company') }}">add Company</a>
 
     <a class="btn btn-primary" href="{{ path('consumer_add_employee') }}">add Employee</a>
@@ -12,22 +13,49 @@
         <div class="sc-container__column">
             <h3>Edit company</h3>
             {% for company in companies %}
+                {% set newName =  random(['apple', 'orange', 'citrus', 'Google', 'Amazon', 'SolarCentury']) %}
+                <button class="btn-outline-dark btn sc-ajax-call mr-2"
+                        data-method="PUT"
+                        data-body='{"name":"{{ newName }}","headquarters":"{{ company.headquarters }}"}'
+                        data-endpoint="{{ path('provider_edit', {'type': 'company', 'id': company.id }) }}">Update Company Name to {{ newName }}
+                </button>
                 <a class="btn-link btn"
-                   href="{{ path('consumer_edit_company', {'company': company.id }) }}">{{ company.name }}</a><br>
+                   href="{{ path('consumer_edit_company', {'company': company.id }) }}">{{ company.name }}</a>
+                <br>
             {% endfor %}
         </div>
         <div class="sc-container__column">
 
             <h3>Edit Employee</h3>
             {% for employee in employees %}
+                {% set newName =  random(['Mike', 'Martha', 'John', 'Paul', 'Cristina', 'Paulina']) %}
+                <button class="btn-outline-dark btn sc-ajax-call mr-2"
+                        data-method="PUT"
+                        data-body='{"firstName":"{{ newName }}","lastName":"{{ employee.lastName }}"}'
+                        data-endpoint="{{ path('provider_edit', {'type': 'employee', 'id': employee.id }) }}">Update Employee first name to {{ newName }}
+                </button>
                 <a class="btn-link btn"
                    href="{{ path('consumer_edit_employee', {'employee': employee.id }) }}">{{ employee.firstName }} {{ employee.lastName }}</a>
                 <br>
             {% endfor %}
         </div>
     </div>
-    <div class="sc-container">
-    <button class="btn-outline-dark btn" id="get_list">Get list</button>
-        <div class="api__result"></div>
+    <div class="container">
+        <div class="row m-4">
+            <button class="btn-outline-dark btn sc-ajax-call mr-2"
+                    data-method="GET"
+                    data-endpoint="{{ path('provider_list',{'type': 'company'}) }}">Get Companies (API)
+            </button>
+            <button class="btn-outline-dark btn sc-ajax-call mr-2"
+                    data-method="GET"
+                    data-endpoint="{{ path('provider_list',{'type': 'employee'}) }}">Get Employees (API)
+            </button>
+        </div>
+        <div class="row m-4">
+            <section class="api__result">
+                <div class="api__result__status"></div>
+                <div class="api__result__data"></div>
+            </section>
+        </div>
     </div>
 {% endblock %}
